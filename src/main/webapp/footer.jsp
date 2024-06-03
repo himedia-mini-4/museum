@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 </div>
-<footer id="footer">
+<footer>
 	<div class="footer_top">
 		<a href="/museum/museum.do" class="logo"> Museum </a>
 	</div>
