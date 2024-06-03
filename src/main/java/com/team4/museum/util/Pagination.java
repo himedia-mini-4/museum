@@ -9,6 +9,7 @@ public class Pagination {
 	private int itemsPerPage = 5;
 	private int pageRange = 5;
 	private int currentPage;
+	private String urlTemplate = "museum.do?command=example&page=%d";
 
 	public int getItemCount() {
 		return itemCount;
@@ -43,6 +44,19 @@ public class Pagination {
 
 	public Pagination setCurrentPage(int currentPage) {
 		this.currentPage = currentPage;
+		return this;
+	}
+
+	public String getUrl() {
+		return getUrl(getCurrentPage());
+	}
+
+	public String getUrl(int page) {
+		return currentPage == page ? "#" : String.format(urlTemplate, page);
+	}
+
+	public Pagination setUrlTemplate(String urlTemplate) {
+		this.urlTemplate = urlTemplate;
 		return this;
 	}
 

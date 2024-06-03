@@ -33,9 +33,6 @@
 			</ul>
 		</c:forEach>
 	</div>
-	<jsp:include page="/util/pagination.jsp">
-		<jsp:param name="pagination" value="${pagination}" />
-		<jsp:param name="paginationPrefix" value="museum.do?command=qnaList&page=" />
-	</jsp:include>
+	<%@ include file="/util/pagination.jsp"%>
 </section>
 <%@ include file="/footer.jsp"%>

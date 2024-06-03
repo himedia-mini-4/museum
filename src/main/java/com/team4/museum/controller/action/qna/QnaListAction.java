@@ -17,6 +17,7 @@ public class QnaListAction implements Action {
 
 		Pagination pagination = Pagination
 				.fromRequest(request)
+				.setUrlTemplate("museum.do?command=qnaList&page=%d")
 				.setItemCount(qdao.getAllCount())
 				.setItemsPerPage(10);
 
