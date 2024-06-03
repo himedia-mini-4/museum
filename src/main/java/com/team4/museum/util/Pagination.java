@@ -1,5 +1,8 @@
 package com.team4.museum.util;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 public class Pagination {
 
 	private int itemCount;
@@ -91,4 +94,18 @@ public class Pagination {
 		return getEnd() < getMaxPage() - 1;
 	}
 
+	public static Pagination fromRequest(HttpServletRequest request) {
+		int page = 1;
+		HttpSession session = request.getSession();
+
+		String pageStr = request.getParameter("page");
+		if (pageStr != null) {
+			page = Integer.parseInt(pageStr);
+		} else if (session.getAttribute("page") != null) {
+			page = (int) session.getAttribute("page");
+		}
+		session.setAttribute("page", page);
+
+		return new Pagination().setCurrentPage(page);
+	}
 }
