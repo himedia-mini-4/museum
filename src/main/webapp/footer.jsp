@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+</div>
 <footer id="footer">
 	<div class="footer_top">
 		<a href="/museum/museum.do" class="logo"> Museum </a>
@@ -17,6 +18,5 @@
 		<p class="footer_bottom_copyright">© Museum. All rights reserved.</p>
 	</div>
 </footer>
-</div>
 </body>
 </html>
