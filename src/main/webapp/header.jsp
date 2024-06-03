@@ -17,6 +17,9 @@
 <link rel="stylesheet" href="css/qna_view.css">
 <link rel="stylesheet" href="css/galleryForm.css">
 <link rel="stylesheet" href="css/notice.css">
+<c:forEach items="${paramValues.stylesheet}" var="css">
+	<link rel="stylesheet" href="${css}">
+</c:forEach>
 <script src="script/member.js"></script>
 <script src="script/header.js"></script>
 <script src="script/artwork.js"></script>
@@ -24,6 +27,9 @@
 <script src="script/qna.js"></script>
 <script src="script/gallery.js"></script>
 <script src="script/notice.js"></script>
+<c:forEach items="${paramValues.script}" var="script">
+	<script src="${script}"></script>
+</c:forEach>
 </head>
 <body>
 	<div class="body-wrap">
