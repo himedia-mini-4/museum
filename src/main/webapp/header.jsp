@@ -13,8 +13,8 @@
 <c:forEach items="${paramValues.stylesheet}" var="css">
 	<link rel="stylesheet" href="${css}">
 </c:forEach>
-<c:forEach items="${paramValues.script}" var="script">
-	<script src="${script}"></script>
+<c:forEach items="${paramValues.script}" var="js">
+	<script src="${js}"></script>
 </c:forEach>
 </head>
 <body>
