@@ -59,7 +59,7 @@ public class Pagination {
 	}
 
 	public int getOffset() {
-		return (getCurrentPage() - 1) * 5;
+		return (getCurrentPage() - 1) * itemsPerPage;
 	}
 
 	public int getBegin() {
