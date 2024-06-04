@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpSession;
 public class Pagination {
 
 	private int itemCount;
-	private int itemsPerPage = 5;
+	private int itemsPerPage = 10;
 	private int pageRange = 5;
 	private int currentPage;
 	private String urlTemplate = "museum.do?command=example&page=%d";
