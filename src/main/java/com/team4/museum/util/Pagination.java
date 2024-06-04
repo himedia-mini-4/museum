@@ -243,15 +243,11 @@ public class Pagination {
 	 */
 	public static Pagination fromRequest(HttpServletRequest request) {
 		int page = 1;
-		HttpSession session = request.getSession();
 
-		String pageStr = request.getParameter("page");
-		if (pageStr != null) {
-			page = Integer.parseInt(pageStr);
-		} else if (session.getAttribute("page") != null) {
-			page = (int) session.getAttribute("page");
+		String pageParam = request.getParameter("page");
+		if (pageParam != null) {
+			page = Integer.parseInt(pageParam);
 		}
-		session.setAttribute("page", page);
 
 		return new Pagination().setCurrentPage(page);
 	}
