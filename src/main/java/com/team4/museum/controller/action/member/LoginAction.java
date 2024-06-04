@@ -48,8 +48,17 @@ public class LoginAction implements Action {
 		HttpSession session = request.getSession();
 		session.setAttribute("loginUser", mvo);
 
+		// 세션에 저장된 돌아갈 페이지 정보를 확인하고, 없으면 index 페이지로 이동
+		String returnUrl = (String) session.getAttribute("returnUrl");
+		if (returnUrl == null) {
+			returnUrl = "museum.do?command=index";
+		} else {
+			// 세션에 저장된 돌아갈 페이지 정보를 삭제 (한 번만 사용)
+			session.removeAttribute("returnUrl");
+		}
+
 		// 돌아갈 페이지 정보와 함께 SUCCESS 를 반환
-		return new Result(Result.SUCCESS, "museum.do?command=index");
+		return new Result(Result.SUCCESS, returnUrl);
 	}
 
 	private class Result {
