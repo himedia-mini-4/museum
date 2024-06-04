@@ -9,6 +9,7 @@
 
 .pagination * {
 	transition: background-color 0.2s ease-in-out, width 0.2s ease-in-out;
+	overflow: hidden;
 }
 
 .pagination .page-navi {
@@ -105,5 +106,8 @@
 	.pagination .page-links {
 		flex: 1 1 100%;
 		order: 4;
+	}
+	.pagination .page-links .page-link.hidable {
+		width: 0;
 	}
 }
