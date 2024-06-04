@@ -28,6 +28,32 @@ function ajax(requestUrl, requestBody, callback) {
 	xhr.send(requestBody);
 }
 
+function ajaxForm(form, callback) {
+	if (!checkForm(form)) {
+		return;
+	}
+
+	const requestBody = {};
+	for (var input of form.elements) {
+		if (input.name) {
+			requestBody[input.name] = input.value;
+		}
+	}
+	ajax(form.action, requestBody, callback);
+}
+
+function checkForm(form) {
+	for (var input of form.elements) {
+		if (input.required && input.value == "") {
+			alert("모든 항목을 입력해 주세요.");
+			input.focus();
+			return false;
+		}
+	}
+
+	return true;
+}
+
 function getDefaultHeaders() {
 	return function(response) {
 		switch (response.code) {
