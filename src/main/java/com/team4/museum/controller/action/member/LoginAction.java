@@ -1,5 +1,9 @@
 package com.team4.museum.controller.action.member;
 
+import static com.team4.museum.util.AjaxResult.BAD_REQUEST;
+import static com.team4.museum.util.AjaxResult.NOT_FOUND;
+import static com.team4.museum.util.AjaxResult.OK;
+
 import java.io.IOException;
 
 import com.team4.museum.controller.action.Action;
@@ -20,27 +24,27 @@ public class LoginAction implements Action {
 	}
 
 	private AjaxResult getResult(HttpServletRequest request, HttpServletResponse response) {
-		// 파라미터에 'id'가 없으면 FAILURE 를 반환
+		// 파라미터에 'id'가 없으면 BAD_REQUEST 를 반환
 		String id = request.getParameter("id");
 		if (id == null || id.equals("")) {
-			return new AjaxResult(AjaxResult.BAD_REQUEST, "'id'를 입력해주세요");
+			return new AjaxResult(BAD_REQUEST, "'id'를 입력해주세요");
 		}
 
-		// 파라미터에 'pwd'가 없으면 FAILURE 를 반환
+		// 파라미터에 'pwd'가 없으면 BAD_REQUEST 를 반환
 		String pwd = request.getParameter("pwd");
 		if (pwd == null || id.equals("")) {
-			return new AjaxResult(AjaxResult.BAD_REQUEST, "'pwd'를 입력해주세요");
+			return new AjaxResult(BAD_REQUEST, "'pwd'를 입력해주세요");
 		}
 
-		// 'id'에 해당하는 'MemberVO'가 없으면 FAILURE 를 반환
+		// 'id'에 해당하는 'MemberVO'가 없으면 NOT_FOUND 를 반환
 		MemberVO mvo = MemberDao.getInstance().getMember(id);
 		if (mvo == null) {
-			return new AjaxResult(AjaxResult.NOT_FOUND, "존재하지 않는 아이디입니다");
+			return new AjaxResult(NOT_FOUND, "존재하지 않는 아이디입니다");
 		}
 
-		// 'pwd'가 비밀번호와 다르면 FAILURE 를 반환
+		// 'pwd'가 비밀번호와 다르면 BAD_REQUEST 를 반환
 		if (!mvo.getPwd().equals(pwd)) {
-			return new AjaxResult(AjaxResult.BAD_REQUEST, "잘못된 비밀번호입니다");
+			return new AjaxResult(BAD_REQUEST, "잘못된 비밀번호입니다");
 		}
 
 		// 로그인 성공 시
@@ -57,8 +61,8 @@ public class LoginAction implements Action {
 			session.removeAttribute("returnUrl");
 		}
 
-		// 돌아갈 페이지 정보와 함께 SUCCESS 를 반환
-		return new AjaxResult(AjaxResult.OK, "로그인에 성공하였습니다", returnUrl);
+		// 돌아갈 페이지 정보와 함께 OK 를 반환
+		return new AjaxResult(OK, "로그인에 성공하였습니다", returnUrl);
 	}
 
 	/**
