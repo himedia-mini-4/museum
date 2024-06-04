@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.team4.museum.controller.action.Action;
 import com.team4.museum.dao.QnaDao;
+import com.team4.museum.util.AjaxResult;
 import com.team4.museum.vo.QnaVO;
 
 import jakarta.servlet.ServletException;
@@ -15,15 +16,14 @@ public class QnaPwdCheckAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("application/json");
-		response.getWriter().write(getResult(request, response).toJson());
+		getResult(request, response).applyToResponse(response);
 	}
 
-	private Result getResult(HttpServletRequest request, HttpServletResponse response) {
+	private AjaxResult getResult(HttpServletRequest request, HttpServletResponse response) {
 		// 파라미터에 'qseq'가 없으면 FAILURE 를 반환
 		String qseqStr = request.getParameter("qseq");
 		if (qseqStr == null || qseqStr.equals("") || !qseqStr.matches("^[0-9]*$")) {
-			return new Result(Result.FAILURE, "잘못된 요청입니다.");
+			return new AjaxResult(AjaxResult.BAD_REQUEST, "'qseq'를 입력해주세요");
 		}
 
 		int qseq = Integer.parseInt(qseqStr);
@@ -33,7 +33,7 @@ public class QnaPwdCheckAction implements Action {
 
 		// 'qseq' 파라미터에 해당하는 'QnaVO'가 없으면 FAILURE 를 반환
 		if (qnaVO == null) {
-			return new Result(Result.FAILURE, "존재하지 않는 문의입니다.");
+			return new AjaxResult(AjaxResult.NO_CONTENT, "존재하지 않는 문의입니다");
 		}
 
 		HttpSession session = request.getSession();
@@ -42,59 +42,43 @@ public class QnaPwdCheckAction implements Action {
 		case "view":
 			url = "museum.do?command=qnaView&qseq=" + qseqStr;
 
-			// 'qnaVO'가 공개 상태면 SUCCESS 를 반환
+			// 'qnaVO'가 공개 상태면 OK 를 반환
 			if (qnaVO.isPublic()) {
-				return new Result(Result.SUCCESS, url);
+				return new AjaxResult(AjaxResult.OK, "공개된 문의입니다", url);
 			}
 
-			// 관리자 일 경우 SUCCESS 를 반환
+			// 관리자 일 경우 OK 를 반환
 			if (session.getAttribute("isAdmin") != null) {
-				return new Result(Result.SUCCESS, url);
+				return new AjaxResult(AjaxResult.OK, "관리자로 확인되었습니다", url);
 			}
 			break;
 		case "edit":
 			url = "museum.do?command=qnaWriteForm&qseq=" + qseqStr;
 			break;
 		default:
-			return new Result(Result.FAILURE, "잘못된 모드입니다.");
+			// 'mode'가 'view'나 'edit'가 아니면 BAD_REQUEST 를 반환
+			return new AjaxResult(AjaxResult.BAD_REQUEST, "'mode' 파라미터가 'view'나 'edit'가 아닙니다");
 		}
 
-		// 세션에 비밀번호 확인 기록이 있는 경우 SUCCESS 를 반환
+		// 세션에 비밀번호 확인 기록이 있는 경우 OK 를 반환
 		if (session.getAttribute("qnaPass" + qseq) != null) {
-			return new Result(Result.SUCCESS, url);
+			return new AjaxResult(AjaxResult.OK, "로그인 기록이 확인되었습니다", url);
 		}
 
-		// 'pwd' 파라미터가 없으면 PWD_REQUEST 를 반환
+		// 'pwd' 파라미터가 없으면 UNAUTHORIZED 를 반환
 		String pwd = request.getParameter("pwd");
 		if (pwd == null || pwd.trim().equals("")) {
-			return new Result(Result.PWD_REQUEST, "비밀번호를 입력해주세요.");
+			return new AjaxResult(AjaxResult.UNAUTHORIZED, "'pwd'를 입력해주세요");
 		}
 
-		// 'pwd'가 비밀번호와 같으면 세션에 비밀번호 확인 기록을 남기고 SUCCESS 를 반환
+		// 'pwd'가 비밀번호와 같으면 세션에 비밀번호 확인 기록을 남기고 OK 를 반환
 		if (qnaVO.getPwd().equals(pwd)) {
 			session.setAttribute("qnaPass" + qseq, qseq);
-			return new Result(Result.SUCCESS, url);
+			return new AjaxResult(AjaxResult.OK, "비밀번호가 확인되었습니다", url);
 		}
 
-		// 아니면 FAILURE 를 반환
-		return new Result(Result.FAILURE, "잘못된 비밀번호입니다.");
+		// 비밀번호가 틀리면 BAD_REQUEST 를 반환
+		return new AjaxResult(AjaxResult.BAD_REQUEST, "잘못된 비밀번호입니다");
 	}
 
-	private class Result {
-		public static final String SUCCESS = "success";
-		public static final String FAILURE = "failure";
-		public static final String PWD_REQUEST = "pwd_request";
-
-		public String code;
-		public String data;
-
-		public Result(String code, String data) {
-			this.code = code;
-			this.data = data;
-		}
-
-		public String toJson() {
-			return "{\"code\":\"" + code + "\",\"data\":\"" + data + "\"}";
-		}
-	}
 }
