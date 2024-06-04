@@ -25,7 +25,7 @@
 					</span>
 				</div>
 				<div class="btn">
-					<input type="button" value="로그인" onclick="ajaxForm(document.loginForm);" required>
+					<input type="button" value="로그인" onclick="ajaxForm(this.form);" required>
 					<input type="button" value="회원가입" onclick="location.href='museum.do?command=joinForm'" required>
 					<input type="button" value="아이디 찾기" onclick="" required>
 				</div>
