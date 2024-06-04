@@ -1,4 +1,8 @@
 function ajax(requestUrl, requestBody, callback) {
+	if (callback === undefined) {
+		callback = getDefaultHeaders();
+	}
+
 	const xhr = new XMLHttpRequest();
 	xhr.open("POST", requestUrl, true);
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -22,4 +26,22 @@ function ajax(requestUrl, requestBody, callback) {
 			.map(([key, value]) => `${key}=${value}`).join('&');
 	}
 	xhr.send(requestBody);
+}
+
+function getDefaultHeaders() {
+	return function(response) {
+		switch (response.code) {
+			case 'success':
+				location.href = response.data;
+				break;
+
+			case 'failure':
+				alert(response.data);
+				break;
+
+			default:
+				alert("알 수 없는 오류가 발생했습니다.");
+				break;
+		}
+	};
 }
