@@ -255,6 +255,28 @@ public class Pagination {
 	}
 
 	/**
+	 * Pagination 객체를 요청의 `pagination` 속성으로 설정합니다.
+	 * 
+	 * @param request 요청
+	 * @return Pagination 객체
+	 */
+	public Pagination applyTo(HttpServletRequest request) {
+		return applyTo(request, "pagination");
+	}
+
+	/**
+	 * Pagination 객체를 요청의 속성으로 설정합니다.
+	 * 
+	 * @param request       요청
+	 * @param attributeName 속성 이름
+	 * @return Pagination 객체
+	 */
+	public Pagination applyTo(HttpServletRequest request, String attributeName) {
+		request.setAttribute(attributeName, this);
+		return this;
+	}
+
+	/**
 	 * 페이지네이션 정보를 요청에서 가져와서 Pagination 객체를 생성합니다.
 	 * 
 	 * @param request 요청
