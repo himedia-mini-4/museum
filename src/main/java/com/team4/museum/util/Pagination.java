@@ -1,5 +1,8 @@
 package com.team4.museum.util;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import jakarta.servlet.http.HttpServletRequest;
 
 public class Pagination {
@@ -274,6 +277,29 @@ public class Pagination {
 	public Pagination applyTo(HttpServletRequest request, String attributeName) {
 		request.setAttribute(attributeName, this);
 		return this;
+	}
+
+	/**
+	 * SQL 쿼리 문의 1, 2번 파라미터에 LIMIT과 OFFSET을 설정합니다.
+	 * 
+	 * @param pstmt SQL 쿼리 문 객체
+	 * @throws SQLException
+	 */
+	public void applyTo(PreparedStatement pstmt) throws SQLException {
+		applyTo(pstmt, 1, 2);
+	}
+
+	/**
+	 * SQL 쿼리 문의 파라미터에 LIMIT과 OFFSET을 설정합니다.
+	 * 
+	 * @param pstmt       SQL 쿼리 문 객체
+	 * @param limitIndex  LIMIT 파라미터 인덱스
+	 * @param offsetIndex OFFSET 파라미터 인덱스
+	 * @throws SQLException
+	 */
+	public void applyTo(PreparedStatement pstmt, int limitIndex, int offsetIndex) throws SQLException {
+		pstmt.setInt(limitIndex, getLimit());
+		pstmt.setInt(offsetIndex, getOffset());
 	}
 
 	/**
