@@ -277,7 +277,7 @@ public class Pagination {
 	}
 
 	/**
-	 * 페이지네이션 정보를 요청에서 가져와서 Pagination 객체를 생성합니다.
+	 * 요청의 `page` 파라미터로 부터 Pagination 객체를 생성합니다.
 	 * 
 	 * @param request 요청
 	 * @return Pagination 객체
@@ -291,6 +291,21 @@ public class Pagination {
 		}
 
 		return new Pagination().setCurrentPage(page);
+	}
+
+	/**
+	 * 요청의 `page` 파라미터로 부터 Pagination 객체를 생성하고 아이템의 총 갯수와 URL 템플릿을 설정합니다.
+	 * 
+	 * @param request     요청
+	 * @param itemCount   아이템의 총 갯수
+	 * @param urlTemplate URL 템플릿
+	 * @return Pagination 객체
+	 */
+	public static Pagination with(HttpServletRequest request, int itemCount, String urlParams) {
+		return fromRequest(request)
+				.setItemCount(itemCount)
+				.setUrlTemplate("museum.do?" + urlParams + "&page=%d")
+				.applyTo(request);
 	}
 
 }
