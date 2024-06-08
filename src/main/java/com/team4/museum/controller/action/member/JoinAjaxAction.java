@@ -13,42 +13,14 @@ public class JoinAjaxAction extends AjaxAction {
 
 	protected AjaxResult handleAjaxRequest(HttpServletRequest request, HttpServletResponse response)
 			throws AjaxException {
+		// 회원가입에 필요한 정보를 받아옴 (name, id, pwd, email, phone)
+		// mustGetString() 호출 시 요청한 파라미터가 없으면 AjaxException을 던짐
 		MemberVO mvo = new MemberVO();
-
-		// 'name' 파라미터가 없는 경우
-		String name = request.getParameter("name");
-		if (name == null || name.equals("")) {
-			return requireParameter("name");
-		}
-		mvo.setName(name);
-
-		// 'id' 파라미터가 없는 경우
-		String id = request.getParameter("id");
-		if (id == null || id.equals("")) {
-			return requireParameter("id");
-		}
-		mvo.setId(id);
-
-		// 'pwd' 파라미터가 없는 경우
-		String pwd = request.getParameter("pwd");
-		if (pwd == null || pwd.equals("")) {
-			return requireParameter("pwd");
-		}
-		mvo.setPwd(pwd);
-
-		// 'email' 파라미터가 없는 경우
-		String email = request.getParameter("email");
-		if (email == null || email.equals("")) {
-			return requireParameter("email");
-		}
-		mvo.setEmail(email);
-
-		// 'phone' 파라미터가 없는 경우
-		String phone = request.getParameter("phone");
-		if (phone == null || phone.equals("")) {
-			return requireParameter("phone");
-		}
-		mvo.setPhone(phone);
+		mvo.setName(mustGetString("name"));
+		mvo.setId(mustGetString("id"));
+		mvo.setPwd(mustGetString("pwd"));
+		mvo.setEmail(mustGetString("email"));
+		mvo.setPhone(mustGetString("phone"));
 
 		// 회원가입에 실패한 경우
 		if (MemberDao.getInstance().insertMember(mvo) == 0) {

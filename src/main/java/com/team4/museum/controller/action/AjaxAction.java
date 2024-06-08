@@ -178,4 +178,40 @@ abstract public class AjaxAction implements Action {
 
 		return returnUrl;
 	}
+
+	/**
+	 * 요구되는 파라미터를 문자열로 반환합니다. 없을 경우 AjaxException을 발생합니다.
+	 * 
+	 * @param request
+	 * @param parameter
+	 * @return
+	 * @throws AjaxException
+	 */
+	protected String mustGetString(String parameter) throws AjaxException {
+		if (currentRequest == null) {
+			throw new AjaxException(SC_INTERNAL_SERVER_ERROR, "메소드는 반드시 handleAjaxRequest 메소드 내에서만 사용해주세요");
+		}
+
+		String str = currentRequest.getParameter(parameter);
+		if (str == null || str.equals("")) {
+			throw new AjaxException(SC_BAD_REQUEST, "'" + parameter + "'를 입력해주세요");
+		}
+		return str;
+	}
+
+	/**
+	 * 요구되는 파라미터를 정수로 반환합니다. 없거나 정수가 아닐 경우 AjaxException을 발생합니다.
+	 * 
+	 * @param request
+	 * @param parameter
+	 * @return 정수
+	 * @throws AjaxException
+	 */
+	protected int mustGetInt(String parameter) throws AjaxException {
+		try {
+			return Integer.parseInt(mustGetString(parameter));
+		} catch (NumberFormatException e) {
+			throw new AjaxException(SC_BAD_REQUEST, "'" + parameter + "'는 숫자로 입력해주세요");
+		}
+	}
 }

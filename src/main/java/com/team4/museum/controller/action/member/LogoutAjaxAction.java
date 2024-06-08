@@ -11,6 +11,7 @@ public class LogoutAjaxAction extends AjaxAction {
 
 	protected AjaxResult handleAjaxRequest(HttpServletRequest request, HttpServletResponse response)
 			throws AjaxException {
+		// 로그인한 사용자 정보를 세션에서 제거
 		request.getSession().removeAttribute("loginUser");
 
 		// 돌아갈 페이지 정보와 함께 성공 메시지를 반환

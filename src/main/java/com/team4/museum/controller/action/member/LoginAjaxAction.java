@@ -17,17 +17,10 @@ public class LoginAjaxAction extends AjaxAction {
 
 	protected AjaxResult handleAjaxRequest(HttpServletRequest request, HttpServletResponse response)
 			throws AjaxException {
-		// 'id' 파라미터가 없는 경우
-		String id = request.getParameter("id");
-		if (id == null || id.equals("")) {
-			return requireParameter("id");
-		}
-
-		// 'pwd' 파라미터가 없는 경우
-		String pwd = request.getParameter("pwd");
-		if (pwd == null || pwd.equals("")) {
-			return requireParameter("pwd");
-		}
+		// 로그인에 필요한 정보를 받아옴 (id, pwd)
+		// mustGetString() 호출 시 요청한 파라미터가 없으면 AjaxException을 던짐
+		String id = mustGetString("id");
+		String pwd = mustGetString("pwd");
 
 		// 입력된 'id'에 해당하는 사용자 계정이 없는 경우
 		MemberVO mvo = MemberDao.getInstance().getMember(id);
