@@ -2,8 +2,8 @@ package com.team4.museum.controller.action.member;
 
 import com.team4.museum.controller.action.AjaxAction;
 import com.team4.museum.dao.MemberDao;
-import com.team4.museum.util.AjaxResult;
 import com.team4.museum.util.UrlUtil;
+import com.team4.museum.util.ajax.AjaxResult;
 import com.team4.museum.vo.MemberVO;
 
 import jakarta.servlet.http.HttpServletRequest;

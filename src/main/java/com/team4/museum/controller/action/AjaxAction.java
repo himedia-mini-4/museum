@@ -12,7 +12,7 @@ import static jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 
 import java.io.IOException;
 
-import com.team4.museum.util.AjaxResult;
+import com.team4.museum.util.ajax.AjaxResult;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
