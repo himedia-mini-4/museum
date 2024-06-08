@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.team4.museum.controller.action.AjaxAction;
 import com.team4.museum.dao.MemberDao;
 import com.team4.museum.util.UrlUtil;
+import com.team4.museum.util.ajax.AjaxException;
 import com.team4.museum.util.ajax.AjaxResult;
 import com.team4.museum.vo.MemberVO;
 
@@ -14,7 +15,8 @@ import jakarta.servlet.http.HttpSession;
 
 public class LoginAjaxAction extends AjaxAction {
 
-	protected AjaxResult handleAjaxRequest(HttpServletRequest request, HttpServletResponse response) {
+	protected AjaxResult handleAjaxRequest(HttpServletRequest request, HttpServletResponse response)
+			throws AjaxException {
 		// 'id' 파라미터가 없는 경우
 		String id = request.getParameter("id");
 		if (id == null || id.equals("")) {
@@ -42,15 +44,8 @@ public class LoginAjaxAction extends AjaxAction {
 		HttpSession session = request.getSession();
 		session.setAttribute("loginUser", mvo);
 
-		// 돌아갈 페이지 정보를 확인하고, 없으면 index 페이지로 이동
-		String returnUrl = "museum.do?command=index";
-		String returnUrlParam = (String) request.getParameter("returnUrl");
-		if (returnUrlParam != null && !returnUrlParam.isEmpty()) {
-			returnUrl = UrlUtil.decode(returnUrlParam);
-		}
-
 		// 돌아갈 페이지 정보와 함께 성공 메시지를 반환
-		return ok("로그인에 성공하였습니다", returnUrl);
+		return ok("로그인에 성공하였습니다", getReturnUrl());
 	}
 
 	/**

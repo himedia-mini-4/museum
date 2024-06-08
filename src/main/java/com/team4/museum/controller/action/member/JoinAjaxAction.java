@@ -2,7 +2,7 @@ package com.team4.museum.controller.action.member;
 
 import com.team4.museum.controller.action.AjaxAction;
 import com.team4.museum.dao.MemberDao;
-import com.team4.museum.util.UrlUtil;
+import com.team4.museum.util.ajax.AjaxException;
 import com.team4.museum.util.ajax.AjaxResult;
 import com.team4.museum.vo.MemberVO;
 
@@ -11,7 +11,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class JoinAjaxAction extends AjaxAction {
 
-	protected AjaxResult handleAjaxRequest(HttpServletRequest request, HttpServletResponse response) {
+	protected AjaxResult handleAjaxRequest(HttpServletRequest request, HttpServletResponse response)
+			throws AjaxException {
 		MemberVO mvo = new MemberVO();
 
 		// 'name' 파라미터가 없는 경우
@@ -54,15 +55,8 @@ public class JoinAjaxAction extends AjaxAction {
 			return internalServerError("회원가입에 실패하였습니다");
 		}
 
-		// 돌아갈 페이지 정보를 확인하고, 없으면 index 페이지로 이동
-		String returnUrl = "museum.do?command=index";
-		String returnUrlParam = (String) request.getParameter("returnUrl");
-		if (returnUrlParam != null && !returnUrlParam.isEmpty()) {
-			returnUrl = UrlUtil.decode(returnUrlParam);
-		}
-
 		// 돌아갈 페이지 정보와 함께 성공 메시지를 반환
-		return ok("회원가입이 완료되었습니다", returnUrl);
+		return ok("회원가입이 완료되었습니다", getReturnUrl());
 	}
 
 }

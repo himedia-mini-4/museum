@@ -12,6 +12,8 @@ import static jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 
 import java.io.IOException;
 
+import com.team4.museum.util.UrlUtil;
+import com.team4.museum.util.ajax.AjaxException;
 import com.team4.museum.util.ajax.AjaxResult;
 
 import jakarta.servlet.ServletException;
@@ -28,6 +30,8 @@ abstract public class AjaxAction implements Action {
 		try {
 			currentRequest = request;
 			result = handleAjaxRequest(request, response);
+		} catch (AjaxException e) {
+			result = badRequest(e.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
 			result = internalServerError();
@@ -41,7 +45,7 @@ abstract public class AjaxAction implements Action {
 	}
 
 	abstract protected AjaxResult handleAjaxRequest(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException;
+			throws ServletException, IOException, AjaxException;
 
 	protected static AjaxResult ok() {
 		return ok("성공");
@@ -153,5 +157,25 @@ abstract public class AjaxAction implements Action {
 
 	protected static AjaxResult requireParameter(String parameter) {
 		return badRequest("'" + parameter + "'를 입력해주세요");
+	}
+
+	/**
+	 * 돌아갈 페이지 URL을 반환합니다. 없을 경우 기본값으로 index 페이지로 이동합니다.
+	 * 
+	 * @return
+	 * @throws AjaxException
+	 */
+	protected String getReturnUrl() throws AjaxException {
+		if (currentRequest == null) {
+			throw new AjaxException(SC_INTERNAL_SERVER_ERROR, "메소드는 반드시 handleAjaxRequest 메소드 내에서만 사용해주세요");
+		}
+
+		String returnUrl = "museum.do?command=index";
+		String returnUrlParam = (String) currentRequest.getParameter("returnUrl");
+		if (returnUrlParam != null && !returnUrlParam.isEmpty()) {
+			returnUrl = UrlUtil.decode(returnUrlParam);
+		}
+
+		return returnUrl;
 	}
 }
