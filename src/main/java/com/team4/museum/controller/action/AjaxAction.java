@@ -20,17 +20,24 @@ import jakarta.servlet.http.HttpServletResponse;
 
 abstract public class AjaxAction implements Action {
 
+	private HttpServletRequest currentRequest;
+
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		AjaxResult result = handleAjaxRequest(request, response);
+		AjaxResult result;
+		try {
+			currentRequest = request;
+			result = handleAjaxRequest(request, response);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = internalServerError();
+		} finally {
+			currentRequest = null;
+		}
 
 		response.setStatus(result.code);
 		response.setContentType("application/json");
-		try {
-			response.getWriter().write(result.toJson());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		response.getWriter().write(result.toJson());
 	}
 
 	abstract protected AjaxResult handleAjaxRequest(HttpServletRequest request, HttpServletResponse response)
